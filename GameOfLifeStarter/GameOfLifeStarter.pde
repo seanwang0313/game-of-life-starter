@@ -1,4 +1,4 @@
-final int SPACING = 20; // each cell's width/height //<>// //<>//
+final int SPACING = 5; // each cell's width/height //<>// //<>//
 final float DENSITY = 0.1; // how likely each cell is to be alive at the start
 int[][] grid; // the 2D array to hold 0's and 1's
 int cols, rows;
@@ -10,23 +10,24 @@ void setup() {
 
   cols = width/SPACING;
   rows = height/SPACING;
-  int totalSquare = cols * rows;
-  int initialSquare = int (totalSquare * DENSITY);
   grid = new int[rows][cols];
 
-  for (int i = 0; i < initialSquare; i++) {
-    int x = int(random (cols));
-    int y = int(random (rows));
-    grid [y][x] = 1;
+  for (int y = 0; y < rows; y++) {
+    for (int x = 0; x < cols; x++) {
+      if (random(1) < DENSITY) {
+        grid[y][x] = 1;
+      } else {
+        grid[y][x] = 0;
+      }
+    }
   }
-
-
-  // populate initial grid
 }
 
 void draw() {
+  background(0);
   showGrid();
-  grid = calcNextGrid();
+  int [][] nextGrid = calcNextGrid();
+  grid = nextGrid;
 }
 
 int[][] calcNextGrid() {
@@ -66,12 +67,11 @@ int countNeighbors(int y, int x) {
       int newY = y + i;
       int newX = x + j;
 
-      if (newY >= 0 && newY < grid.length && newX >= 0 && newX < grid.length) {
+      if (newY >= 0 && newY < rows && newX >= 0 && newX < cols) {
         n += grid[newY][newX];
       }
     }
   }
-
   return n;
 }
 
@@ -80,7 +80,7 @@ void showGrid() {
     for (int j = 0; j < cols; j++) {
       if (grid[i][j] == 1) {
         fill (255, 0, 0);
-        square(j * SPACING, i * SPACING, 20);
+        square(j * SPACING, i * SPACING, SPACING);
       }
     }
   }
