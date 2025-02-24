@@ -1,16 +1,27 @@
 final int SPACING = 20; // each cell's width/height //<>// //<>//
 final float DENSITY = 0.1; // how likely each cell is to be alive at the start
 int[][] grid; // the 2D array to hold 0's and 1's
+int cols, rows;
 
 void setup() {
   size(800, 600); // adjust accordingly, make sure it's a multiple of SPACING
   noStroke(); // don't draw the edges of each cell
   frameRate(10); // controls speed of regeneration
-  grid = new int[height / SPACING][width / SPACING];
+
+  cols = width/SPACING;
+  rows = height/SPACING;
+  int totalSquare = cols * rows;
+  int initialSquare = int (totalSquare * DENSITY);
+  grid = new int[rows][cols];
+
+  for (int i = 0; i < initialSquare; i++) {
+    int x = int(random (cols));
+    int y = int(random (rows));
+    grid [y][x] = 1;
+  }
+
 
   // populate initial grid
-  // your code here
-
 }
 
 void draw() {
@@ -21,22 +32,56 @@ void draw() {
 int[][] calcNextGrid() {
   int[][] nextGrid = new int[grid.length][grid[0].length];
 
-  // your code here
+  for (int y = 0; y < rows; y++) {
+    for (int x = 0; x < cols; x++) {
+      int neighbors = countNeighbors(y, x);
+
+      if (grid[y][x] == 1) {
+        if (neighbors == 2 || neighbors == 3) {
+          nextGrid[y][x] = 1;
+        } else {
+          nextGrid[y][x] = 0;
+        }
+      } else {
+        if (neighbors == 3) {
+          nextGrid[y][x] = 1;
+        } else {
+          nextGrid[y][x] = 0;
+        }
+      }
+    }
+  }
 
   return nextGrid;
 }
 
 int countNeighbors(int y, int x) {
   int n = 0; // don't count yourself!
-  
-  // your code here
-  // don't check out-of-bounds cells
+
+  for (int i = -1; i <= 1; i++) {
+    for (int j = -1; j <= 1; j++) {
+      if (i == 0 && j == 0) {
+        continue;
+      }
+      int newY = y + i;
+      int newX = x + j;
+
+      if (newY >= 0 && newY < grid.length && newX >= 0 && newX < grid.length) {
+        n += grid[newY][newX];
+      }
+    }
+  }
 
   return n;
 }
 
 void showGrid() {
-  // your code here
-  // use square() to represent each cell
-  // use fill(r, g, b) to control color: black for empty, red for filled (or alive)
+  for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < cols; j++) {
+      if (grid[i][j] == 1) {
+        fill (255, 0, 0);
+        square(j * SPACING, i * SPACING, 20);
+      }
+    }
+  }
 }
