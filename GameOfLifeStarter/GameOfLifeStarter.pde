@@ -1,5 +1,5 @@
 final int SPACING = 10; // each cell's width/height //<>// //<>//
-final float DENSITY = 0.3; // how likely each cell is to be alive at the start
+final float DENSITY = 0.5; // how likely each cell is to be alive at the start
 int[][] grid; // the 2D array to hold 0's and 1's
 int cols, rows;
 int [][] ageGrid;
@@ -14,8 +14,9 @@ void setup() {
   cols = width/SPACING;
   rows = height/SPACING;
   grid = new int[rows][cols];
-  ageGrid = new int [rows][cols];
+  ageGrid = new int [rows][cols]; // 2d array for the age
 
+  // initialize
   for (int y = 0; y < rows; y++) {
     for (int x = 0; x < cols; x++) {
       if (random(1) <= DENSITY) {
@@ -33,7 +34,7 @@ void draw() {
   background(0);
   showGrid();
 
-  if (!paused || stepNext) {
+  if (!paused || stepNext) { // to ensure stopping and stepping
     grid = calcNextGrid();
     stepNext = false;
   }
@@ -102,8 +103,8 @@ void showGrid() {
   for (int i = 0; i < rows; i++) {
     for (int j = 0; j < cols; j++) {
       if (grid[i][j] == 1) {
-        brightness = max(50, ageGrid[i][j] * 5);
-        fill (255, brightness, brightness);
+        brightness = min(255, max(50, ageGrid[i][j] * 5)); // set boundary for the brightness
+        fill (255, brightness, brightness); // gradually become white
         square(j * SPACING, i * SPACING, SPACING);
       }
     }
