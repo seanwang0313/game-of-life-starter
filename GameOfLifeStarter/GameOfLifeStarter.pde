@@ -1,5 +1,5 @@
 final int SPACING = 10; // each cell's width/height //<>// //<>//
-final float DENSITY = 0.5; // how likely each cell is to be alive at the start
+final float DENSITY = 0.7; // how likely each cell is to be alive at the start
 int[][] grid; // the 2D array to hold 0's and 1's
 int cols, rows;
 int [][] ageGrid;
@@ -81,7 +81,7 @@ int[][] calcNextGrid() {
 
 int countNeighbors(int y, int x) {
   int n = 0; // don't count yourself!
-
+// gained inspiration from this website https://stackoverflow.com/questions/19778973/finding-8-neighbours-in-2d-array
   for (int i = -1; i <= 1; i++) {
     for (int j = -1; j <= 1; j++) {
       if (i == 0 && j == 0) {
